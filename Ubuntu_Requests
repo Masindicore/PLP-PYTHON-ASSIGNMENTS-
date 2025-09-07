@@ -1,0 +1,44 @@
+import requests
+import os
+from urllib.parse import urlparse
+
+def main(url):
+    print("Welcome to the Ubuntu Image Fetcher")
+    print("A tool for mindfully collecting images from the web\n")
+    
+    try:
+        # Clean up any accidental whitespace in the URL
+        url = url.strip()
+        
+        # Create directory if it doesn't exist
+        os.makedirs("Fetched_Images", exist_ok=True)
+        
+        # Fetch the image with a timeout and proper headers
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+        response = requests.get(url, timeout=10, headers=headers)
+        response.raise_for_status()  # Raise an error for bad status codes
+        
+        # Use custom filename
+        filename = "Act_of_kindness.jpg"
+        filepath = os.path.join("Fetched_Images", filename)
+        
+        # Save the image
+        with open(filepath, 'wb') as f:
+            f.write(response.content)
+            
+        print(f"✓ Successfully fetched: {filename}")
+        print(f"✓ Image saved to {filepath}")
+        print("\nConnection strengthened. Community enriched.")
+        
+    except requests.exceptions.RequestException as e:
+        print(f"✗ Connection error: {e}")
+    except Exception as e:
+        print(f"✗ An unexpected error occurred: {e}")
+
+if __name__ == "__main__":
+    # Define the URL here
+    image_url = "https://images.pexels.com/photos/33613172/pexels-photo-33613172.jpeg"
+    main(image_url)
+        
